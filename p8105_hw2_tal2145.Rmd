@@ -1,9 +1,22 @@
 ---
-title: "p8105_hw2_tal2145"
+title: "Homework 2"
+author: "Troy Layouni"
+date: 2019-09-20
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+The first step is to load the tidyverse package
+
+```{r packages} 
+library(tidyverse) 
+```
+
+
+
+
+
 
