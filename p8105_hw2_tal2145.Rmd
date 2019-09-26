@@ -9,10 +9,32 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The first step is to load the tidyverse package
+
+**The first step is to load the tidyverse package**
 
 ```{r packages} 
 library(tidyverse) 
+```
+
+## Question 1
+
+Reading in the Mr. Trash Wheel data from the first excel sheet titled "Mr. Trash Wheel" as well as 
+  * Omitting non-data entries 
+  * Cleaning the names of variables
+  * Omitting rows not including dumpster-specific data
+  * Rounding the "Sports Ball" variable to the nearest integer and converting it to an integer variable using as.integer
+
+```{r}
+library(readxl)
+
+Trash_Wheel_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", 
+  col_names = TRUE, 
+  sheet = "Mr. Trash Wheel", 
+  skip = 1, 
+  range = "A2:N336") %>% 
+  janitor::clean_names() %>%
+  drop_na(dumpster) %>% 
+  mutate(sports_balls = as.integer(sports_balls))
 ```
 
 
