@@ -42,8 +42,11 @@ Trash_Wheel_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xls
 
   * Omitting rows without data
   * Adding a year variable
+  * Combining of both data on precipitation for 2017 and 2018
+  * Converting the month number to a character variable for month name
 
-```{r Precipitation_Data}
+Reading in and cleaning 2017 Precipitation data
+```{r Precipitation_Data_2017}
 Precipitation_2017_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
     col_names = TRUE,
     sheet = "2017 Precipitation",
@@ -51,16 +54,25 @@ Precipitation_2017_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7
     range = "A2:B14") %>% 
     janitor::clean_names() %>%
     mutate(year = 2017) 
-    
+```
+
+Reading in and cleaning 2018 Precipitation data
+```{r Precipitation_data_2018}
 Precipitation_2018_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
     col_names = TRUE,
     sheet = "2018 Precipitation",
     skip = 1,
     range = "A2:B14") %>% 
     janitor::clean_names() %>%
-    mutate(Year = 2018)    
+    mutate(year = 2018)    
 ```
 
+Combining precipitation data for 2017 and 2018 and creating a character month variable 
+```{r Precipitation_data_full}
+Precipitation_data_full =
+  bind_rows(Precipitation_2017_data, Precipitation_2018_data) %>% 
+  mutate(month = month.name[month])
+```
 
 
 
