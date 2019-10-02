@@ -25,10 +25,10 @@ Reading in the Mr. Trash Wheel data from the first excel sheet titled "Mr. Trash
   * Omitting rows not including dumpster-specific data
   * Rounding the "Sports Ball" variable to the nearest integer and converting it to an integer variable using as.integer
 
-```{r, Trash_Wheel_Data}
+```{r, trash_wheel_Data}
 library(readxl)
 
-Trash_Wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+trash_wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
   sheet = "Mr. Trash Wheel", 
   range = "A2:N408") %>% 
   janitor::clean_names() %>%
@@ -45,8 +45,8 @@ Trash_Wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx"
 
 Reading in and cleaning 2017 Precipitation data
 
-```{r Precipitation_Data_2017}
-Precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+```{r precipitation_data_2017}
+precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
     sheet = "2017 Precipitation",
     range = "A2:B14") %>% 
     janitor::clean_names() %>%
@@ -55,8 +55,8 @@ Precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-1
 
 Reading in and cleaning 2018 Precipitation data
 
-```{r Precipitation_data_2018}
-Precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+```{r precipitation_data_2018}
+precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
     sheet = "2018 Precipitation",
     range = "A2:B14") %>% 
     janitor::clean_names() %>%
@@ -66,33 +66,32 @@ Precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-1
 Combining precipitation data for 2017 and 2018 and creating a character month variable 
 
 ```{r Precipitation_data_full}
-Precipitation_data_full =
-  bind_rows(Precipitation_2017_data, Precipitation_2018_data) %>% 
+precipitation_data_full =
+  bind_rows(precipitation_2017_data, precipitation_2018_data) %>% 
   mutate(month = month.name[month])
 ```
 
 **Question 1, part 3: Describing the precipitation data**
 
-The Mr. Trash Wheel dataset includes data on the contents of each dumpster filled from 2014-2019. There is information on sports balls collected, with a median of `r median(pull(filter(Trash_Wheel_data, year == 2017), sports_balls))` balls in each dumpster in 2017, as well as information on dumpster weight, averaging  `r mean(pull(filter(Trash_Wheel_data, year == 2018), weight_tons))` tons per dumpster in 2018, `r mean(pull(filter(Trash_Wheel_data, year == 2017), weight_tons))` tons in 2017, `r mean(pull(filter(Trash_Wheel_data, year == 2016), weight_tons))` tons in 2016,  `r mean(pull(filter(Trash_Wheel_data, year == 2015), weight_tons))` tons in 2015, and `r mean(pull(filter(Trash_Wheel_data, year == 2014), weight_tons))` tons in 2014. 
+The Mr. Trash Wheel dataset includes data on the contents of each dumpster filled from 2014-2019. There is information on sports balls collected, with a median of `r median(pull(filter(trash_wheel_data, year == 2017), sports_balls))` balls in each dumpster in 2017, as well as information on dumpster weight, averaging  `r mean(pull(filter(trash_wheel_data, year == 2018), weight_tons))` tons per dumpster in 2018, `r mean(pull(filter(trash_wheel_data, year == 2017), weight_tons))` tons in 2017, `r mean(pull(filter(trash_wheel_data, year == 2016), weight_tons))` tons in 2016,  `r mean(pull(filter(trash_wheel_data, year == 2015), weight_tons))` tons in 2015, and `r mean(pull(filter(trash_wheel_data, year == 2014), weight_tons))` tons in 2014. 
 
-The data collected for precipitation in 2017 has `r nrow(Precipitation_2017_data)` rows, one precipitation measure for each month, and has `r ncol(Precipitation_2017_data)` columns, one for month, total precipitation, and year. In 2017, Baltimore, where Mr. Trash Wheel is located received a total of `r sum(pull(Precipitation_2017_data, total))` inches of precipitation. The data collected for precipitation in 2018 also contains `r nrow(Precipitation_2018_data)` rows, and has `r ncol(Precipitation_2018_data)` columns, including the same information on total precipitation, month and year for 2018. According to these data, in 2018 Baltimore received `r sum(pull(Precipitation_2018_data, total))` inches of precipitation.
-These data were combined into one data frame containing `r nrow(Precipitation_data_full)` rows, one for every month of 2017 and 2018 and `r ncol(Precipitation_data_full)` columns. 
+The data collected for precipitation in 2017 has `r nrow(precipitation_2017_data)` rows, one precipitation measure for each month, and has `r ncol(precipitation_2017_data)` columns, one for month, total precipitation, and year. In 2017, Baltimore, where Mr. Trash Wheel is located received a total of `r sum(pull(precipitation_2017_data, total))` inches of precipitation. The data collected for precipitation in 2018 also contains `r nrow(precipitation_2018_data)` rows, and has `r ncol(precipitation_2018_data)` columns, including the same information on total precipitation, month and year for 2018. According to these data, in 2018 Baltimore received `r sum(pull(precipitation_2018_data, total))` inches of precipitation.
+These data were combined into one data frame containing `r nrow(precipitation_data_full)` rows, one for every month of 2017 and 2018 and `r ncol(precipitation_data_full)` columns. 
 
-The mean monthly precipitation for 2017 is `r mean(pull(Precipitation_2017_data, total))` inches (standard deviation of `r sd(pull(Precipitation_2017_data, total))` inches)
+The mean monthly precipitation for 2017 is `r mean(pull(precipitation_2017_data, total))` inches (standard deviation of `r sd(pull(precipitation_2017_data, total))` inches)
 
-The mean monthly precipitation is `r mean(pull(Precipitation_2018_data, total))` inches (standard deviation of `r sd(pull(Precipitation_2018_data, total))` inches). 
+The mean monthly precipitation is `r mean(pull(precipitation_2018_data, total))` inches (standard deviation of `r sd(pull(precipitation_2018_data, total))` inches). 
 
 ## Question 2
 
-**Question 2, part 1: cleaning politician party affiliation data "pols-month"**
+**Question 2, part 1: cleaning politician party affiliation data "pols-month" by:**
 
-* cleaning data
 * breaking up data variable into month, day and year 
 * creating a new variable called "president"
 * removing "day" variable
 * replacing month number with month name 
 
-```{r}
+```{r Political_party_data}
 Political_Party_data = 
 read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
   separate(mon, sep = "-", into = c("year", "month", "day")) %>% 
@@ -102,7 +101,7 @@ read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
   mutate(month = month.name[month]) 
 ```
 
-**Question 2, part 2: cleaning the stock market index data**
+**Question 2, part 2: cleaning the stock market index data by:**
 
 * breaking up data variable into month, day and year 
 * replacing month number with month name 
@@ -110,7 +109,7 @@ read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
 * organize data according to year and month
 * arrange data so that year and month are the first columns
 
-```{r}
+```{r stock_market_data}
 Stock_Market_data = 
 read_csv(file = "./data/fivethirtyeight_datasets/snp.csv") %>%
   separate(date, sep = "/", into = c("month", "day", "year")) %>% 
@@ -120,6 +119,23 @@ read_csv(file = "./data/fivethirtyeight_datasets/snp.csv") %>%
   mutate(month = month.name[month]) %>% 
   arrange(year, month)
 ```
+
+**Question 2, part 3: tidying the unemployment data by: 
+
+* use pivot_longer to create a month variable and percentage of unemployment variable 
+* clean data 
+
+```{r unemployment_data}
+unemployment_data = 
+read_csv(file = "./data/fivethirtyeight_datasets/unemployment.csv") %>%
+  janitor::clean_names() %>% 
+  pivot_longer(jan:dec, names_to = "month", values_to = "unemploy_percent") %>% 
+  mutate(month = recode(month, "jan" = "january", "feb" = "february", "mar" = "march", "apr" = "april", "jun" = "june", "jul" = "july", "aug" = "august", "sep" = "september", "oct" = "october", "nov" = "november", "dec" = "december"))
+
+# mutate(month = match(month, month.abb)) 
+ # mutate(month = month.name[month]) 
+```
+
 
 
 
