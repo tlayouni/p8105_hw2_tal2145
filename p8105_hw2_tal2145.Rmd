@@ -88,9 +88,9 @@ The mean monthly precipitation is `r mean(pull(Precipitation_2018_data, total))`
 
 * cleaning data
 * breaking up data variable into month, day and year 
-* replacing month number with month name 
 * creating a new variable called "president"
 * removing "day" variable
+* replacing month number with month name 
 
 ```{r}
 Political_Party_data = 
@@ -101,6 +101,26 @@ read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
   mutate(month = as.integer(month)) %>% 
   mutate(month = month.name[month]) 
 ```
+
+**Question 2, part 2: cleaning the stock market index data**
+
+* breaking up data variable into month, day and year 
+* replacing month number with month name 
+* removing "day" variable 
+* organize data according to year and month
+* arrange data so that year and month are the first columns
+
+```{r}
+Stock_Market_data = 
+read_csv(file = "./data/fivethirtyeight_datasets/snp.csv") %>%
+  separate(date, sep = "/", into = c("month", "day", "year")) %>% 
+  select(-day) %>% 
+  select(year, month, everything()) %>% 
+  mutate(month = as.integer(month)) %>% 
+  mutate(month = month.name[month]) %>% 
+  arrange(year, month)
+```
+
 
 
 
