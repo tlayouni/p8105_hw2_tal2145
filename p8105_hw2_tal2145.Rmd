@@ -29,9 +29,7 @@ Reading in the Mr. Trash Wheel data from the first excel sheet titled "Mr. Trash
 library(readxl)
 
 Trash_Wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
-  col_names = TRUE, 
   sheet = "Mr. Trash Wheel", 
-  skip = 1, 
   range = "A2:N408") %>% 
   janitor::clean_names() %>%
   drop_na(dumpster) %>% 
@@ -49,9 +47,7 @@ Reading in and cleaning 2017 Precipitation data
 
 ```{r Precipitation_Data_2017}
 Precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
-    col_names = TRUE,
     sheet = "2017 Precipitation",
-    skip = 1,
     range = "A2:B14") %>% 
     janitor::clean_names() %>%
     mutate(year = 2017) 
@@ -61,9 +57,7 @@ Reading in and cleaning 2018 Precipitation data
 
 ```{r Precipitation_data_2018}
 Precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
-    col_names = TRUE,
     sheet = "2018 Precipitation",
-    skip = 1,
     range = "A2:B14") %>% 
     janitor::clean_names() %>%
     mutate(year = 2018)    
@@ -78,16 +72,35 @@ Precipitation_data_full =
 ```
 
 **Question 1, part 3: Describing the precipitation data**
-Mr. Trash Wheel, 
+
+The Mr. Trash Wheel dataset includes data on the contents of each dumpster filled from 2014-2019. There is information on sports balls collected, with a median of `r median(pull(filter(Trash_Wheel_data, year == 2017), sports_balls))` balls in each dumpster in 2017, as well as information on dumpster weight, averaging  `r mean(pull(filter(Trash_Wheel_data, year == 2018), weight_tons))` tons per dumpster in 2018, `r mean(pull(filter(Trash_Wheel_data, year == 2017), weight_tons))` tons in 2017, `r mean(pull(filter(Trash_Wheel_data, year == 2016), weight_tons))` tons in 2016,  `r mean(pull(filter(Trash_Wheel_data, year == 2015), weight_tons))` tons in 2015, and `r mean(pull(filter(Trash_Wheel_data, year == 2014), weight_tons))` tons in 2014. 
+
 The data collected for precipitation in 2017 has `r nrow(Precipitation_2017_data)` rows, one precipitation measure for each month, and has `r ncol(Precipitation_2017_data)` columns, one for month, total precipitation, and year. In 2017, Baltimore, where Mr. Trash Wheel is located received a total of `r sum(pull(Precipitation_2017_data, total))` inches of precipitation. The data collected for precipitation in 2018 also contains `r nrow(Precipitation_2018_data)` rows, and has `r ncol(Precipitation_2018_data)` columns, including the same information on total precipitation, month and year for 2018. According to these data, in 2018 Baltimore received `r sum(pull(Precipitation_2018_data, total))` inches of precipitation.
 These data were combined into one data frame containing `r nrow(Precipitation_data_full)` rows, one for every month of 2017 and 2018 and `r ncol(Precipitation_data_full)` columns. 
-
-
 
 The mean monthly precipitation for 2017 is `r mean(pull(Precipitation_2017_data, total))` inches (standard deviation of `r sd(pull(Precipitation_2017_data, total))` inches)
 
 The mean monthly precipitation is `r mean(pull(Precipitation_2018_data, total))` inches (standard deviation of `r sd(pull(Precipitation_2018_data, total))` inches). 
 
+## Question 2
+
+**Question 2, part 1: cleaning politician party affiliation data "pols-month"**
+
+* cleaning data
+* breaking up data variable into month, day and year 
+* replacing month number with month name 
+* creating a new variable called "president"
+* removing "day" variable
+
+```{r}
+Political_Party_data = 
+read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
+  separate(mon, sep = "-", into = c("year", "month", "day")) %>% 
+  mutate(president = if_else(prez_dem < 1, "gop", "dem")) %>% 
+  select(-day) %>% 
+  mutate(month = as.integer(month)) %>% 
+  mutate(month = month.name[month]) 
+```
 
 
 
