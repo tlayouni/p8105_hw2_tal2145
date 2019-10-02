@@ -28,11 +28,11 @@ Reading in the Mr. Trash Wheel data from the first excel sheet titled "Mr. Trash
 ```{r, Trash_Wheel_Data}
 library(readxl)
 
-Trash_Wheel_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
+Trash_Wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
   col_names = TRUE, 
   sheet = "Mr. Trash Wheel", 
   skip = 1, 
-  range = "A2:N336") %>% 
+  range = "A2:N408") %>% 
   janitor::clean_names() %>%
   drop_na(dumpster) %>% 
   mutate(sports_balls = as.integer(sports_balls))
@@ -46,8 +46,9 @@ Trash_Wheel_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xls
   * Converting the month number to a character variable for month name
 
 Reading in and cleaning 2017 Precipitation data
+
 ```{r Precipitation_Data_2017}
-Precipitation_2017_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
+Precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
     col_names = TRUE,
     sheet = "2017 Precipitation",
     skip = 1,
@@ -57,8 +58,9 @@ Precipitation_2017_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7
 ```
 
 Reading in and cleaning 2018 Precipitation data
+
 ```{r Precipitation_data_2018}
-Precipitation_2018_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
+Precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
     col_names = TRUE,
     sheet = "2018 Precipitation",
     skip = 1,
@@ -68,12 +70,23 @@ Precipitation_2018_data = read_excel("./data/HealthyHarborWaterWheelTotals2018-7
 ```
 
 Combining precipitation data for 2017 and 2018 and creating a character month variable 
+
 ```{r Precipitation_data_full}
 Precipitation_data_full =
   bind_rows(Precipitation_2017_data, Precipitation_2018_data) %>% 
   mutate(month = month.name[month])
 ```
 
+**Question 1, part 3: Describing the precipitation data**
+Mr. Trash Wheel, 
+The data collected for precipitation in 2017 has `r nrow(Precipitation_2017_data)` rows, one precipitation measure for each month, and has `r ncol(Precipitation_2017_data)` columns, one for month, total precipitation, and year. In 2017, Baltimore, where Mr. Trash Wheel is located received a total of `r sum(pull(Precipitation_2017_data, total))` inches of precipitation. The data collected for precipitation in 2018 also contains `r nrow(Precipitation_2018_data)` rows, and has `r ncol(Precipitation_2018_data)` columns, including the same information on total precipitation, month and year for 2018. According to these data, in 2018 Baltimore received `r sum(pull(Precipitation_2018_data, total))` inches of precipitation.
+These data were combined into one data frame containing `r nrow(Precipitation_data_full)` rows, one for every month of 2017 and 2018 and `r ncol(Precipitation_data_full)` columns. 
+
+
+
+The mean monthly precipitation for 2017 is `r mean(pull(Precipitation_2017_data, total))` inches (standard deviation of `r sd(pull(Precipitation_2017_data, total))` inches)
+
+The mean monthly precipitation is `r mean(pull(Precipitation_2018_data, total))` inches (standard deviation of `r sd(pull(Precipitation_2018_data, total))` inches). 
 
 
 
