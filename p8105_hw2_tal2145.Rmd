@@ -65,7 +65,7 @@ precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-1
 
 Combining precipitation data for 2017 and 2018 and creating a character month variable 
 
-```{r Precipitation_data_full}
+```{r precipitation_data_full}
 precipitation_data_full =
   bind_rows(precipitation_2017_data, precipitation_2018_data) %>% 
   mutate(month = month.name[month])
@@ -91,14 +91,13 @@ The mean monthly precipitation is `r mean(pull(precipitation_2018_data, total))`
 * removing "day" variable
 * replacing month number with month name 
 
-```{r Political_party_data}
-Political_Party_data = 
+```{r political_party_data}
+political_party_data = 
 read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
   separate(mon, sep = "-", into = c("year", "month", "day")) %>% 
   mutate(president = if_else(prez_dem < 1, "gop", "dem")) %>% 
-  select(-day) %>% 
-  mutate(month = as.integer(month)) %>% 
-  mutate(month = month.name[month]) 
+  select(-day, -prez_dem, -prez_gop) %>% 
+  mutate(month = month.name[(as.integer(month))])
 ```
 
 **Question 2, part 2: cleaning the stock market index data by:**
@@ -110,17 +109,17 @@ read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
 * arrange data so that year and month are the first columns
 
 ```{r stock_market_data}
-Stock_Market_data = 
+stock_market_data = 
 read_csv(file = "./data/fivethirtyeight_datasets/snp.csv") %>%
+  janitor::clean_names() %>% 
   separate(date, sep = "/", into = c("month", "day", "year")) %>% 
-  select(-day) %>% 
-  select(year, month, everything()) %>% 
-  mutate(month = as.integer(month)) %>% 
-  mutate(month = month.name[month]) %>% 
-  arrange(year, month)
+  mutate(month = as.factor(month)) %>% 
+  arrange(year, month) %>%
+  select(-day, year, month, close) %>% 
+  mutate(month = month.name[(as.integer(month))]) 
 ```
 
-**Question 2, part 3: tidying the unemployment data by: 
+**Question 2, part 3: tidying the unemployment data by:** 
 
 * use pivot_longer to create a month variable and percentage of unemployment variable 
 * clean data 
@@ -130,10 +129,26 @@ unemployment_data =
 read_csv(file = "./data/fivethirtyeight_datasets/unemployment.csv") %>%
   janitor::clean_names() %>% 
   pivot_longer(jan:dec, names_to = "month", values_to = "unemploy_percent") %>% 
-  mutate(month = recode(month, "jan" = "january", "feb" = "february", "mar" = "march", "apr" = "april", "jun" = "june", "jul" = "july", "aug" = "august", "sep" = "september", "oct" = "october", "nov" = "november", "dec" = "december"))
+  mutate(month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December"))
 
 # mutate(month = match(month, month.abb)) 
  # mutate(month = month.name[month]) 
+```
+
+**Question 2, part 4: Joining datasets by merging political_party_data and stock_market_data, then merging unemployment into the result**
+
+Merging stock_market_data into political_party_data
+
+```{r}
+political_stock_data = 
+  left_join(political_party_data, stock_market_data, by = c("year", "month"))
+```
+
+Merging unemployment_data into political_stock_data
+
+```{r}
+fivethirtyeight_data = 
+  left_join(political_stock_data, unemployment_data, by = c("year", "month"))
 ```
 
 
