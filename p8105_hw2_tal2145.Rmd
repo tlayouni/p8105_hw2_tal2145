@@ -97,7 +97,8 @@ read_csv(file = "./data/fivethirtyeight_datasets/pols-month.csv") %>%
   separate(mon, sep = "-", into = c("year", "month", "day")) %>% 
   mutate(president = if_else(prez_dem < 1, "gop", "dem")) %>% 
   select(-day, -prez_dem, -prez_gop) %>% 
-  mutate(month = month.name[(as.integer(month))])
+  mutate(month = month.name[(as.integer(month))]) %>% 
+  mutate(year = as.numeric(year))
 ```
 
 **Question 2, part 2: cleaning the stock market index data by:**
@@ -116,7 +117,8 @@ read_csv(file = "./data/fivethirtyeight_datasets/snp.csv") %>%
   mutate(month = as.factor(month)) %>% 
   arrange(year, month) %>%
   select(-day, year, month, close) %>% 
-  mutate(month = month.name[(as.integer(month))]) 
+  mutate(month = month.name[(as.integer(month))]) %>% 
+  mutate(year = as.numeric(year))
 ```
 
 **Question 2, part 3: tidying the unemployment data by:** 
@@ -129,7 +131,8 @@ unemployment_data =
 read_csv(file = "./data/fivethirtyeight_datasets/unemployment.csv") %>%
   janitor::clean_names() %>% 
   pivot_longer(jan:dec, names_to = "month", values_to = "unemploy_percent") %>% 
-  mutate(month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December"))
+  mutate(month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December")) %>% 
+mutate(year = as.numeric(year))
 
 # mutate(month = match(month, month.abb)) 
  # mutate(month = month.name[month]) 
