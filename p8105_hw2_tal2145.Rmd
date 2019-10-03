@@ -209,7 +209,9 @@ baby_names_data %>%
   filter(ethnicity == "WHITE NON HISPANIC", gender == "MALE", year_of_birth == "2016") %>% 
   ggplot(aes(x = rank, y = count)) +
   geom_point(color = "blue") +
-  ggtitle("Number of Non-Hispanic White Males Born in 2016 with Ranked Names")
+  ggtitle("Number of Non-Hispanic White Males Born in 2016 with Ranked Names") + 
+  xlab("Ranking of Name") + 
+  ylab("Number of Children")
 ```
 
 
