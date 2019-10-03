@@ -157,7 +157,23 @@ fivethirtyeight_data =
 **Question 2, part 5: Summary of FiveThirtyEight data**
 
 
-The FiveThirtyEight dataset (fivethirtyeight_data) contains information on political leaders party affiliation as well as stock market closing values and unemployment rates by year and month. This data contains `r ncol(fivethirtyeight_data)` rows, each representing different month and year in history, and `r nrow(fivethirtyeight_data)` columns. We can see that between `r min(pull(fivethirtyeight_data, year))` and `r max(pull(fivethirtyeight_data, year))`, unemployment at its lowest was `r min(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)` %. 
+The FiveThirtyEight dataset (fivethirtyeight_data) contains information on political leaders party affiliation as well as stock market closing values and unemployment rates by year and month. Variables like "sen_dem" and "rep_gop" give the number of democratic senators and GOP representatives, respectively, and "president" tells us the party affiliation of the president of the United States (dem, or gop). This data contains `r ncol(fivethirtyeight_data)` rows, each representing different month and year in history, and `r nrow(fivethirtyeight_data)` columns. We can see that between `r min(pull(fivethirtyeight_data, year))` and `r max(pull(fivethirtyeight_data, year))`, unemployment (variable "unemploy_percent") at its lowest was `r min(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)` % and at its highest was `r max(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)`%. We can also see that the mean closing value of the Standard & Poor (S&P) stock market index (variable "close") over this time period was `r mean(pull(fivethirtyeight_data, close), na.rm = TRUE)`.
+
+## Question 3
+
+**Question 3, part 1: Loading and tidying Popular baby names data by:
+
+* removing duplicate rows 
+* creating uniform case structure
+
+```{r}
+baby_names_data = 
+read_csv(file = "./data/Popular_Baby_Names.csv") %>%
+  janitor::clean_names() %>% 
+  mutate(childs_first_name = str_to_upper(childs_first_name)) %>%
+  distinct()
+```
+
 
 
 
