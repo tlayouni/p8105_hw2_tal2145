@@ -178,7 +178,7 @@ read_csv(file = "./data/Popular_Baby_Names.csv") %>%
 
 **Question 3, part 2: creating a table for rank in popularity of the name Olivia for females over time**
 
-```{r}
+```{r olivia_table}
 baby_names_data %>%
   filter(childs_first_name == "OLIVIA", gender == "FEMALE") %>% 
   select(ethnicity, year_of_birth, rank) %>% 
@@ -186,16 +186,33 @@ baby_names_data %>%
     names_from = "year_of_birth",
     values_from = "rank"
   ) %>% 
-  knitr::kable(caption = "Popularity Rank of the Name Olivia from 2011-2016")
+  knitr::kable(caption = "Popularity Rank of the Name Olivia by Ethnicity from 2011-2016")
 ```
 
 **Question 3, part 3: creating a table for most popular boy's name over time**
 
-```{r}
-
+```{r boy_names_table}
+baby_names_data %>%
+  filter(rank == "1", gender == "MALE") %>% 
+  select(ethnicity, year_of_birth, childs_first_name) %>% 
+  pivot_wider(
+    names_from = "year_of_birth",
+    values_from = "childs_first_name"
+  ) %>% 
+  knitr::kable(caption = "Most Popular Male Name by Ethnicity from 2011-2016")
 ```
 
-Question 3, part  4: creating a scatter plot of 
+**Question 3, part  4: creating a scatter plot of the number white male boys born in 2016 by rank of their respective names**
+
+```{r rank_count_plot}
+baby_names_data %>%
+  filter(ethnicity == "WHITE NON HISPANIC", gender == "MALE", year_of_birth == "2016") %>% 
+  ggplot(aes(x = rank, y = count)) +
+  geom_point(color = "blue") +
+  ggtitle("Number of Non-Hispanic White Males Born in 2016 with Ranked Names")
+```
+
+
 
 
 
