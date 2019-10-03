@@ -125,9 +125,6 @@ read_csv(file = "./data/fivethirtyeight_datasets/unemployment.csv") %>%
   pivot_longer(jan:dec, names_to = "month", values_to = "unemploy_percent") %>% 
   mutate(month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December")) %>% 
   mutate(year = as.numeric(year))
-
-# mutate(month = match(month, month.abb)) 
- # mutate(month = month.name[month]) 
 ```
 
 **Question 2, part 4: Joining datasets by merging political_party_data and stock_market_data, then merging unemployment into the result**
