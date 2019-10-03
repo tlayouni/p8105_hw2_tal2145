@@ -142,14 +142,14 @@ mutate(year = as.numeric(year))
 
 Merging stock_market_data into political_party_data
 
-```{r}
+```{r political_stock_data}
 political_stock_data = 
   left_join(political_party_data, stock_market_data, by = c("year", "month"))
 ```
 
 Merging unemployment_data into political_stock_data
 
-```{r}
+```{r fivethirtyeight_data}
 fivethirtyeight_data = 
   left_join(political_stock_data, unemployment_data, by = c("year", "month"))
 ```
@@ -167,7 +167,7 @@ The FiveThirtyEight dataset (fivethirtyeight_data) contains information on polit
 * creating uniform case structure
 * creating consistent formatting for the ethnicity variable
 
-```{r}
+```{r baby_names_data}
 baby_names_data = 
 read_csv(file = "./data/Popular_Baby_Names.csv") %>%
   janitor::clean_names() %>% 
@@ -176,7 +176,26 @@ read_csv(file = "./data/Popular_Baby_Names.csv") %>%
   distinct()
 ```
 
+**Question 3, part 2: creating a table for rank in popularity of the name Olivia for females over time**
 
+```{r}
+baby_names_data %>%
+  filter(childs_first_name == "OLIVIA", gender == "FEMALE") %>% 
+  select(ethnicity, year_of_birth, rank) %>% 
+  pivot_wider(
+    names_from = "year_of_birth",
+    values_from = "rank"
+  ) %>% 
+  knitr::kable(caption = "Popularity Rank of the Name Olivia from 2011-2016")
+```
+
+**Question 3, part 3: creating a table for most popular boy's name over time**
+
+```{r}
+
+```
+
+Question 3, part  4: creating a scatter plot of 
 
 
 
