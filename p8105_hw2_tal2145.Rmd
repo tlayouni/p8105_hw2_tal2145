@@ -9,8 +9,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-**The first step is to load the tidyverse package**
+The first step is to load the tidyverse package
 
 ```{r packages} 
 library(tidyverse) 
@@ -18,7 +17,7 @@ library(tidyverse)
 
 ## Question 1
 
-Reading in the Mr. Trash Wheel data from the first excel sheet titled "Mr. Trash Wheel" as well as:
+Reading in the Captain Trash Wheel data from the first excel sheet titled "Mr. Trash Wheel" as well as:
 
   * Omitting non-data entries 
   * Cleaning the names of variables
@@ -33,7 +32,7 @@ trash_wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx"
   range = "A2:N408") %>% 
   janitor::clean_names() %>%
   drop_na(dumpster) %>% 
-  mutate(sports_balls = as.integer(sports_balls))
+  mutate(sports_balls = as.integer(round(sports_balls)))
 ```
 
 **Question 1, part 2: Reading in and cleaning precipitation data**
@@ -43,7 +42,7 @@ trash_wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx"
   * Combining of both data on precipitation for 2017 and 2018
   * Converting the month number to a character variable for month name
 
-Reading in and cleaning 2017 Precipitation data
+Reading in and cleaning "2017 Precipitation" data
 
 ```{r precipitation_data_2017}
 precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
@@ -53,7 +52,7 @@ precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-1
     mutate(year = 2017) 
 ```
 
-Reading in and cleaning 2018 Precipitation data
+Reading in and cleaning "2018 Precipitation" data
 
 ```{r precipitation_data_2018}
 precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
@@ -63,7 +62,7 @@ precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-1
     mutate(year = 2018)    
 ```
 
-Combining precipitation data for 2017 and 2018 and creating a character month variable 
+Combining precipitation data for 2017 and 2018 and converting month into a character variable
 
 ```{r precipitation_data_full}
 precipitation_data_full =
@@ -73,20 +72,13 @@ precipitation_data_full =
 
 **Question 1, part 3: Describing the precipitation data**
 
-The Mr. Trash Wheel dataset includes data on the contents of each dumpster filled from 2014-2019. There is information on sports balls collected, with a median of `r median(pull(filter(trash_wheel_data, year == 2017), sports_balls))` balls in each dumpster in 2017, as well as information on dumpster weight, averaging  `r mean(pull(filter(trash_wheel_data, year == 2018), weight_tons))` tons per dumpster in 2018, `r mean(pull(filter(trash_wheel_data, year == 2017), weight_tons))` tons in 2017, `r mean(pull(filter(trash_wheel_data, year == 2016), weight_tons))` tons in 2016,  `r mean(pull(filter(trash_wheel_data, year == 2015), weight_tons))` tons in 2015, and `r mean(pull(filter(trash_wheel_data, year == 2014), weight_tons))` tons in 2014. 
-
-The data collected for precipitation in 2017 has `r nrow(precipitation_2017_data)` rows, one precipitation measure for each month, and has `r ncol(precipitation_2017_data)` columns, one for month, total precipitation, and year. In 2017, Baltimore, where Mr. Trash Wheel is located received a total of `r sum(pull(precipitation_2017_data, total))` inches of precipitation. The data collected for precipitation in 2018 also contains `r nrow(precipitation_2018_data)` rows, and has `r ncol(precipitation_2018_data)` columns, including the same information on total precipitation, month and year for 2018. According to these data, in 2018 Baltimore received `r sum(pull(precipitation_2018_data, total))` inches of precipitation.
-These data were combined into one data frame containing `r nrow(precipitation_data_full)` rows, one for every month of 2017 and 2018 and `r ncol(precipitation_data_full)` columns. 
-
-The mean monthly precipitation for 2017 is `r mean(pull(precipitation_2017_data, total))` inches (standard deviation of `r sd(pull(precipitation_2017_data, total))` inches)
-
-The mean monthly precipitation is `r mean(pull(precipitation_2018_data, total))` inches (standard deviation of `r sd(pull(precipitation_2018_data, total))` inches). 
+The Captain Trash Wheel dataset, `trash_wheel_data` includes data on the contents of each dumpster filled from 2014-2019. There are `r ncol(precipitation_data_full)` columns in this dataset, with information on debris collected such as plastic bags and sports balls, with a median of `r median(pull(filter(trash_wheel_data, year == 2017), sports_balls))` balls in each dumpster in 2017, as well as information on dumpster volume and weight, which averaged  `r mean(pull(filter(trash_wheel_data, year == 2018), weight_tons))` tons per dumpster in 2018, `r mean(pull(filter(trash_wheel_data, year == 2017), weight_tons))` tons in 2017, `r mean(pull(filter(trash_wheel_data, year == 2016), weight_tons))` tons in 2016,  `r mean(pull(filter(trash_wheel_data, year == 2015), weight_tons))` tons in 2015, and `r mean(pull(filter(trash_wheel_data, year == 2014), weight_tons))` tons in 2014. The dataset also gives the number of homes that were powered by Captain Trash Wheel. Data on precipitation in Baltimore, where Captain Trash Wheel is located, was collected and combined into our dataset `precipitation_data_full`, which includes `r ncol(precipitation_data_full)` columns for the variables month, year and total precipitation, and `r nrow(precipitation_data_full)` rows, one for every month of 2017 and 2018. In 2017, Baltimore, received a total of `r sum(pull(precipitation_2017_data, total))` inches of precipitation and in 2018 received `r sum(pull(precipitation_2018_data, total))` inches. The mean monthly precipitation for 2017 was `r mean(pull(precipitation_2017_data, total))` inches (standard deviation of `r sd(pull(precipitation_2017_data, total))` inches) and for 2018 the mean was `r mean(pull(precipitation_2018_data, total))` inches (standard deviation of `r sd(pull(precipitation_2018_data, total))` inches). 
 
 ## Question 2
 
 **Question 2, part 1: cleaning politician party affiliation data "pols-month" by:**
 
-* breaking up data variable into month, day and year 
+* breaking up data variable into month, day, and year 
 * creating a new variable called "president"
 * removing "day" variable
 * replacing month number with month name 
@@ -132,7 +124,7 @@ read_csv(file = "./data/fivethirtyeight_datasets/unemployment.csv") %>%
   janitor::clean_names() %>% 
   pivot_longer(jan:dec, names_to = "month", values_to = "unemploy_percent") %>% 
   mutate(month = recode(month, "jan" = "January", "feb" = "February", "mar" = "March", "apr" = "April", "jun" = "June", "jul" = "July", "aug" = "August", "sep" = "September", "oct" = "October", "nov" = "November", "dec" = "December")) %>% 
-mutate(year = as.numeric(year))
+  mutate(year = as.numeric(year))
 
 # mutate(month = match(month, month.abb)) 
  # mutate(month = month.name[month]) 
@@ -140,14 +132,14 @@ mutate(year = as.numeric(year))
 
 **Question 2, part 4: Joining datasets by merging political_party_data and stock_market_data, then merging unemployment into the result**
 
-Merging stock_market_data into political_party_data
+Merging `stock_market_data` into `political_party_data`
 
 ```{r political_stock_data}
 political_stock_data = 
   left_join(political_party_data, stock_market_data, by = c("year", "month"))
 ```
 
-Merging unemployment_data into political_stock_data
+Merging `unemployment_data` into `political_stock_data`
 
 ```{r fivethirtyeight_data}
 fivethirtyeight_data = 
@@ -156,12 +148,11 @@ fivethirtyeight_data =
 
 **Question 2, part 5: Summary of FiveThirtyEight data**
 
-
-The FiveThirtyEight dataset (fivethirtyeight_data) contains information on political leaders party affiliation as well as stock market closing values and unemployment rates by year and month. Variables like "sen_dem" and "rep_gop" give the number of democratic senators and GOP representatives, respectively, and "president" tells us the party affiliation of the president of the United States (dem, or gop). This data contains `r ncol(fivethirtyeight_data)` rows, each representing different month and year in history, and `r nrow(fivethirtyeight_data)` columns. We can see that between `r min(pull(fivethirtyeight_data, year))` and `r max(pull(fivethirtyeight_data, year))`, unemployment (variable "unemploy_percent") at its lowest was `r min(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)` % and at its highest was `r max(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)`%. We can also see that the mean closing value of the Standard & Poor (S&P) stock market index (variable "close") over this time period was `r mean(pull(fivethirtyeight_data, close), na.rm = TRUE)`.
+The FiveThirtyEight dataset, `fivethirtyeight_data` contains information on political leaders party affiliation as well as stock market closing values and unemployment rates by year and month. Variables like `sen_dem` and `rep_gop` give the number of democratic senators and GOP representatives, respectively, and `president` tells us the party affiliation of the president of the United States (dem, or gop). This data contains `r ncol(fivethirtyeight_data)` rows, each representing different month and year in history, and `r nrow(fivethirtyeight_data)` columns. We can see that between `r min(pull(fivethirtyeight_data, year))` and `r max(pull(fivethirtyeight_data, year))`, unemployment (variable `unemploy_percent`) at its lowest was `r min(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)` % and at its highest was `r max(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)`%. We can also see that the mean closing value of the Standard & Poor (S&P) stock market index (variable `close`) over this time period was `r mean(pull(fivethirtyeight_data, close), na.rm = TRUE)`.
 
 ## Question 3
 
-**Question 3, part 1: Loading and tidying Popular baby names data by:
+**Question 3, part 1: Loading and tidying Popular baby names data by:**
 
 * removing duplicate rows 
 * creating uniform case structure
