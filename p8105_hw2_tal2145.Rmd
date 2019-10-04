@@ -42,7 +42,7 @@ trash_wheel_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx"
   * Combining of both data on precipitation for 2017 and 2018
   * Converting the month number to a character variable for month name
 
-Reading in and cleaning "2017 Precipitation" data
+Reading in and cleaning `2017 Precipitation` sheet 
 
 ```{r precipitation_data_2017}
 precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
@@ -52,7 +52,7 @@ precipitation_2017_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-1
     mutate(year = 2017) 
 ```
 
-Reading in and cleaning "2018 Precipitation" data
+Reading in and cleaning `2018 Precipitation` sheet
 
 ```{r precipitation_data_2018}
 precipitation_2018_data = read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
@@ -145,6 +145,8 @@ fivethirtyeight_data =
 
 **Question 2, part 5: Summary of FiveThirtyEight data**
 
+The dataset `political_party_data` contains `r nrow(pull(political_party_data))` rows of observations and `r ncol(pull(political_party_data))` columns that includes variables for the number of democratic and republican governors, senators, representatives and the political affiliation of the president by month and year from `r min(pull(political_party_data, year))` to `r max(pull(political_party_data, year))`. On average there were `r round(mean(pull(political_party_data, sen_gop)))` GOP senators and `r round(mean(pull(political_party_data, sen_dem)))` Democratic senators over this time. The dataset `stock_market_data` has `r nrow(pull(stock_market_data))` rows of observations and `r ncol(pull(stock_market_data))` columns that includes variables `year`, `month`, and `close`, giving stock market closing values between `r min(pull(stock_market_data, year))` and `r max(pull(stock_market_data, year))` by year and month 
+ 
 The FiveThirtyEight dataset, `fivethirtyeight_data` contains information on political leaders party affiliation as well as stock market closing values and unemployment rates by year and month. Variables like `sen_dem` and `rep_gop` give the number of democratic senators and GOP representatives, respectively, and `president` tells us the party affiliation of the president of the United States (dem, or gop). This data contains `r ncol(fivethirtyeight_data)` rows, each representing different month and year in history, and `r nrow(fivethirtyeight_data)` columns. We can see that between `r min(pull(fivethirtyeight_data, year))` and `r max(pull(fivethirtyeight_data, year))`, unemployment (variable `unemploy_percent`) at its lowest was `r min(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)` % and at its highest was `r max(pull(fivethirtyeight_data, unemploy_percent), na.rm = TRUE)`%. We can also see that the mean closing value of the Standard & Poor (S&P) stock market index (variable `close`) over this time period was `r mean(pull(fivethirtyeight_data, close), na.rm = TRUE)`.
 
 ## Question 3
